@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap · Entrevista técnica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14161f;
+    --surface:#1b1e2a;
+    --raised:#222739;
+    --border:#2b3044;
+    --text:#c9d1e3;
+    --muted:#7d86a3;
+    --faint:#565f7c;
+    --acc-term:#7aa2f7;
+    --acc-git:#f7768e;
+    --acc-py:#e0af68;
+    --acc-sql:#9ece6a;
+    --acc-api:#7dcfff;
+    --acc-log:#bb9af7;
+    --acc-vie:#ff9e64;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scrollbar-color:var(--border) var(--bg)}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    html{scroll-behavior:smooth}
+  }
+  ::selection{background:#3a4266;color:#fff}
+  :focus-visible{outline:2px solid var(--acc-term);outline-offset:2px;border-radius:4px}
+  code{
+    font-family:'JetBrains Mono',ui-monospace,Consolas,monospace;
+    font-size:.86em;
+    background:#10121a;
+    border:1px solid var(--border);
+    padding:1px 5px;
+    border-radius:4px;
+    color:#e5e9f5;
+    white-space:nowrap;
+  }
+  a{color:var(--acc-term);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--faint)}
+  a:hover{text-decoration-color:currentColor}
+
+  .layout{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+
+  /* ---------- sidebar ---------- */
+  .sidebar{
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+    border-right:1px solid var(--border);
+    padding:28px 20px;display:flex;flex-direction:column;gap:8px;
+  }
+  .side-title{font-size:13px;color:var(--muted);margin-bottom:12px}
+  .ring-wrap{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+  .ring{flex-shrink:0}
+  #ring-fill{transition:stroke-dashoffset .5s ease}
+  .pct-big{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700}
+  .pct-sub{font-size:12.5px;color:var(--muted);line-height:1.3}
+  .nav-dia{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);
+    margin:16px 4px 4px;
+  }
+  .nav-item{
+    display:flex;align-items:center;gap:10px;
+    padding:7px 8px;border-radius:6px;text-decoration:none;color:var(--text);
+    font-size:14px;
+  }
+  .nav-item:hover{background:var(--surface)}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .nav-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nav-pct{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted)}
+  .reset{
+    margin-top:auto;
+    background:transparent;border:1px solid var(--border);color:var(--muted);
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    padding:9px;border-radius:6px;cursor:pointer;
+  }
+  .reset:hover{color:var(--text);border-color:var(--faint)}
+
+  /* ---------- contenido ---------- */
+  .contenido{max-width:860px;margin:0 auto;padding:48px 56px 96px;width:100%}
+
+  .hero{border-bottom:1px solid var(--border);padding-bottom:36px;margin-bottom:28px}
+  h1{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-.02em;line-height:1.15}
+  .sub{color:var(--muted);margin-top:10px;font-size:15px}
+  .cd{margin-top:30px}
+  .cd-cmd{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--faint)}
+  .cd-label{font-size:14px;color:var(--muted);margin-top:14px}
+  .cd-digits{
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:clamp(38px,6vw,62px);letter-spacing:-.01em;line-height:1.1;
+    color:var(--acc-vie);
+  }
+  .cursor{
+    display:inline-block;width:.5em;height:.95em;
+    background:var(--acc-vie);margin-left:6px;vertical-align:-.08em;
+    animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0}}
+
+  /* reglas */
+  .reglas{margin-bottom:36px}
+  .reglas ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 28px}
+  .reglas li{font-size:14px;color:var(--muted);display:flex;gap:9px;align-items:baseline}
+  .prompt{font-family:'JetBrains Mono',monospace;color:var(--acc-term);font-weight:600}
+  .reglas li strong{color:var(--text);font-weight:600}
+
+  /* bloques */
+  .bloque{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:8px;margin:0 0 18px;scroll-margin-top:20px;
+  }
+  .bloque>summary{
+    list-style:none;cursor:pointer;user-select:none;
+    display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;
+    padding:16px 18px;
+  }
+  .bloque>summary::-webkit-details-marker{display:none}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;
+    width:34px;height:34px;display:grid;place-items:center;border-radius:7px;
+    color:var(--acc);
+    border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);
+    background:color-mix(in srgb,var(--acc) 12%,transparent);
+  }
+  .btitle{display:block;font-weight:600;font-size:16.5px}
+  .bcuando{display:block;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:1px}
+  .bprog{display:flex;align-items:center;gap:10px}
+  .bar{width:84px;height:4px;background:var(--border);border-radius:99px;overflow:hidden}
+  .fill{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .35s ease}
+  .pct{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);min-width:36px;text-align:right}
+  .chev{color:var(--muted);display:grid;place-items:center;transition:transform .25s ease}
+  .bloque[open] .chev{transform:rotate(180deg)}
+  .bbody{border-top:1px dashed var(--border);padding:4px 20px 22px}
+
+  .seccion{margin-top:20px}
+  .seccion h3{font-size:15px;font-weight:600}
+  .nota{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:2px}
+
+  .checklist{list-style:none;margin-top:10px}
+  .checklist li{margin:7px 0}
+  .checklist label{display:flex;gap:11px;cursor:pointer;align-items:flex-start;font-size:14.5px}
+  .checklist input{position:absolute;opacity:0;width:0;height:0}
+  .box{
+    flex-shrink:0;width:18px;height:18px;margin-top:2px;border-radius:5px;
+    border:1.5px solid var(--faint);position:relative;transition:background .15s,border-color .15s;
+  }
+  .checklist input:focus-visible + .box{outline:2px solid var(--acc);outline-offset:2px}
+  .checklist input:checked + .box{background:var(--acc);border-color:var(--acc)}
+  .checklist input:checked + .box::after{
+    content:"";position:absolute;left:5.5px;top:2px;width:4px;height:8px;
+    border:solid #14161f;border-width:0 2px 2px 0;transform:rotate(45deg);
+  }
+  .checklist input:checked ~ .txt{color:var(--muted)}
+
+  .pasos{margin:10px 0 0 20px}
+  .pasos li{margin:7px 0;font-size:14.5px}
+  .pasos li::marker{color:var(--acc);font-family:'JetBrains Mono',monospace;font-weight:600}
+
+  .qa{border-left:2px solid var(--border);margin:8px 0}
+  .qa>summary{
+    list-style:none;cursor:pointer;padding:8px 0 8px 12px;font-size:14.5px;
+    display:flex;gap:9px;align-items:baseline;
+  }
+  .qa>summary::-webkit-details-marker{display:none}
+  .qa>summary::before{
+    content:"›";color:var(--acc);font-weight:700;transition:transform .2s;flex-shrink:0;
+  }
+  .qa[open]>summary::before{transform:rotate(90deg)}
+  .ans{padding:2px 0 10px 21px;font-size:14px;color:var(--muted)}
+  .ans code{color:var(--text)}
+
+  .tabla{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}
+  .tabla th{
+    font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;
+    color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);
+  }
+  .tabla td{padding:7px 10px;border-bottom:1px solid color-mix(in srgb,var(--border) 55%,transparent)}
+  .tabla td:first-child{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--acc)}
+  .tabla tr:last-child td{border-bottom:none}
+
+  .recursos{list-style:none;margin-top:10px}
+  .recursos li{margin:12px 0}
+  .recursos a{font-weight:600;font-size:14.5px}
+  .recursos p{font-size:13.5px;color:var(--muted);margin-top:2px}
+
+  .nota-box{
+    margin-top:20px;border-left:3px solid var(--acc);
+    background:color-mix(in srgb,var(--acc) 8%,transparent);
+    padding:13px 16px;font-size:14.5px;border-radius:0 6px 6px 0;
+  }
+
+  .grupo{margin-top:14px}
+  .grupo h4{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;color:var(--acc);margin-bottom:6px}
+  .maestras{list-style:none;columns:2;column-gap:32px}
+  .maestras li{
+    break-inside:avoid;font-size:13.5px;color:var(--muted);
+    padding:3px 0 3px 14px;position:relative;
+  }
+  .maestras li::before{content:"›";position:absolute;left:0;color:var(--faint)}
+
+  /* consejos */
+  .consejos{margin-top:44px;border-top:1px solid var(--border);padding-top:30px}
+  .consejos h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
+  .consejos .sub2{color:var(--muted);font-size:14px;margin:6px 0 16px}
+  .consejos ul{list-style:none}
+  .consejos li{
+    font-size:14.5px;color:var(--muted);margin:10px 0;padding-left:18px;position:relative;
+  }
+  .consejos li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;background:var(--acc-vie);border-radius:2px}
+  .consejos strong{color:var(--text);font-weight:600}
+
+  footer{margin-top:40px;font-size:13px;color:var(--faint)}
+
+  @media (max-width:940px){
+    .layout{grid-template-columns:1fr}
+    .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}
+    .reset{margin-top:18px}
+    .contenido{padding:36px 20px 80px}
+    .maestras{columns:1}
+    .bprog .bar{display:none}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .cursor{animation:none}
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <p class="side-title">Progreso general</p>
+    <div class="ring-wrap">
+      <svg class="ring" width="84" height="84" viewBox="0 0 84 84" aria-hidden="true">
+        <defs>
+          <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#7aa2f7"/><stop offset="1" stop-color="#bb9af7"/>
+          </linearGradient>
+        </defs>
+        <circle cx="42" cy="42" r="34" fill="none" stroke="var(--border)" stroke-width="6"/>
+        <circle id="ring-fill" cx="42" cy="42" r="34" fill="none" stroke="url(#grad)" stroke-width="6"
+                stroke-linecap="round" stroke-dasharray="213.63" stroke-dashoffset="213.63" transform="rotate(-90 42 42)"/>
+      </svg>
+      <div>
+        <p class="pct-big" id="pct-all">0%</p>
+        <p class="pct-sub">del plan<br>completado</p>
+      </div>
+    </div>
+    <nav id="nav" aria-label="Bloques del plan"></nav>
+    <button class="reset" id="reset" type="button">reiniciar progreso</button>
+  </aside>
+
+  <main class="contenido">
+
+    <header class="hero">
+      <h1>Roadmap · Entrevista técnica</h1>
+      <p class="sub">De miércoles a viernes. Nivel: extra difícil, porque ellos la van a poner difícil.</p>
+      <div class="cd">
+        <p class="cd-cmd">$ countdown --viernes</p>
+        <p class="cd-label">para la entrevista</p>
+        <div class="cd-digits"><span id="cd">--:--:--</span><span class="cursor"></span></div>
+      </div>
+    </header>
+
+    <section class="reglas" aria-label="Reglas del plan">
+      <ul>
+        <li><span class="prompt">&gt;</span><span><strong>20% leer, 80% teclear.</strong> Cada comando se ejecuta en tu máquina, no solo se lee.</span></li>
+        <li><span class="prompt">&gt;</span><span><strong>Todo en voz alta.</strong> Ensaya explicar mientras haces; evalúan cómo razonas.</span></li>
+        <li><span class="prompt">&gt;</span><span><strong>Quiz al final de cada bloque.</strong> Si fallas una, vuelve a ese tema.</span></li>
+        <li><span class="prompt">&gt;</span><span><strong>Anota tus errores</strong> en <code>errores.md</code>: ese es tu repaso del viernes.</span></li>
+        <li><span class="prompt">&gt;</span><span><strong>Trabaja en Git Bash</strong> (o WSL). Las entrevistas asumen bash, no CMD.</span></li>
+      </ul>
+    </section>
+
+    <div id="bloques"></div>
+
+    <section class="consejos">
+      <h2>Consejos para la entrevista</h2>
+      <p class="sub2">Tan importantes como lo técnico.</p>
+      <ul>
+        <li><strong>Piensa en voz alta siempre.</strong> Un candidato callado que acierta vale menos que uno que razona bien en voz alta.</li>
+        <li><strong>"No lo sé, pero lo investigaría así..."</strong> vale oro. Inventar una respuesta te entierra.</li>
+        <li><strong>Pregunta antes de codear.</strong> Clarificar requisitos es señal de senior, no de duda.</li>
+        <li><strong>Si te trabas, verbaliza:</strong> "estoy pensando en X pero me preocupa Y". Nada de silencio incómodo.</li>
+        <li><strong>Es tu primo y la va a poner difícil a propósito.</strong> Esa presión ES el entrenamiento. Trátalo como un entrevistador real, no como familia.</li>
+        <li><strong>Vas en nombre de tu hermano.</strong> La mejor forma de no dejarlo mal no es sabértelo todo: es mostrar cómo piensas, cómo te recuperas de los errores y cuántas ganas tienes.</li>
+      </ul>
+    </section>
+
+    <footer>Tu progreso se guarda automáticamente en este navegador. Abre este archivo cada día y sigue marcando.</footer>
+
+  </main>
+</div>
+
+<script>
+const PLAN = [
+  { dia:"Día 1 — Miércoles", bloques:[
+    { id:"a", letra:"A", titulo:"Terminal", cuando:"mañana · ~3h", acc:"var(--acc-term)", secciones:[
+      { tipo:"check", titulo:"Nivel esencial", nota:"tienes que dominarlo sin pensar", items:[
+        "Navegación: <code>pwd</code>, <code>cd</code> (<code>..</code>, <code>~</code>, <code>cd -</code> para volver), <code>ls -la</code>, <code>ls -R</code>",
+        "Archivos/carpetas: <code>mkdir -p a/b/c</code>, <code>touch</code>, <code>cp -r</code>, <code>mv</code> (mover Y renombrar), <code>rm -rf</code> (con respeto), <code>cat</code>, <code>less</code>, <code>head -n 20</code>, <code>tail -f</code>",
+        "Texto: <code>echo</code>, <code>grep -rn \"texto\" .</code>, flags de grep: <code>-i</code>, <code>-v</code>, <code>-c</code>, <code>-l</code>",
+        "Buscar archivos: <code>find . -name \"*.py\"</code>, comodines <code>*</code>, <code>?</code>, <code>[a-z]</code>",
+        "Pipes y redirección: <code>|</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>2&gt;</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>;</code>",
+        "Sistema: <code>which python</code> / <code>where python</code>, <code>echo $PATH</code>, <code>export VAR=valor</code>, <code>history</code>, <code>clear</code>, <code>exit</code>",
+        "Procesos: <code>ps aux</code>, <code>top</code> (o <code>htop</code>), <code>kill -9 &lt;pid&gt;</code>, <code>Ctrl+C</code> (mata) vs <code>Ctrl+Z</code> (suspende), <code>jobs</code>, <code>fg</code>, <code>bg</code>",
+        "Red: <code>ping</code>, <code>curl https://api.ejemplo.com</code>, <code>curl -I</code> (ver headers), <code>curl -X POST -H \"Content-Type: application/json\" -d '{}'</code>",
+        "Conteo y orden: <code>wc -l</code>, <code>sort</code>, <code>uniq</code>, <code>sort | uniq -c | sort -rn</code>",
+        "Ayuda: <code>man grep</code>, <code>grep --help</code> (y cómo salir de <code>man</code>/<code>less</code>: con <code>q</code>)"
+      ]},
+      { tipo:"check", titulo:"Nivel picky", nota:"lo que separa al que memorizó del que trabaja", items:[
+        "<code>!!</code> (repite el último comando), <code>!grep</code> (repite el último que empezó con grep), <code>Ctrl+R</code> (búsqueda reversa en historial), autocompletado con <code>Tab</code>",
+        "Códigos de salida: <code>echo $?</code> → <code>0</code> = éxito, cualquier otro = error",
+        "<code>sed 's/viejo/nuevo/g' archivo</code>, <code>awk '{print $1}'</code>, <code>cut -d',' -f2</code>, <code>tr 'a-z' 'A-Z'</code>",
+        "<code>xargs</code> (ej: <code>find . -name \"*.log\" | xargs rm</code>), <code>tee</code> (escribe a archivo Y pantalla)",
+        "<code>diff archivo1 archivo2</code>, <code>tar -czvf</code> / <code>tar -xzvf</code>",
+        "<code>alias</code>, <code>~/.bashrc</code> (para qué sirve)",
+        "Permisos (concepto): <code>chmod 755</code>, qué significan r/w/x y usuario/grupo/otros",
+        "<code>ssh</code> / <code>scp</code> (qué son, aunque no los practiques)",
+        "<code>/dev/null</code>, <code>&gt; /dev/null 2&gt;&amp;1</code>",
+        "Equivalentes Windows por si los menciona: <code>dir</code>, <code>type</code>, <code>findstr</code>, <code>tasklist</code>, <code>taskkill /PID</code>, <code>$env:VAR</code> en PowerShell"
+      ]},
+      { tipo:"check", titulo:"Práctica obligatoria", nota:"sin salir de la terminal", items:[
+        "Crea <code>practica/proyecto/{src,tests,docs}</code> con un solo comando",
+        "Crea 5 archivos <code>.txt</code> y 3 <code>.py</code> dentro de <code>src</code>, con contenido usando <code>echo</code> y <code>&gt;</code>",
+        "Mueve todos los <code>.txt</code> a <code>docs</code> con comodines",
+        "Busca una palabra dentro de todos los archivos, mostrando número de línea",
+        "Cuenta cuántas líneas tienen todos los <code>.py</code> juntos",
+        "Renombra la carpeta <code>docs</code> a <code>documentacion</code>",
+        "Borra todo <code>practica/</code> sin que te pida confirmación por archivo"
+      ]},
+      { tipo:"quiz", titulo:"Quiz", items:[
+        { q:"¿Diferencia entre <code>&gt;</code> y <code>&gt;&gt;</code>?", a:"<code>&gt;</code> sobrescribe el archivo desde cero; <code>&gt;&gt;</code> agrega al final sin borrar lo que ya tiene." },
+        { q:"¿Qué hace <code>grep -rn \"TODO\" .</code>?", a:"Busca la palabra TODO en todos los archivos del directorio actual y sus subcarpetas (recursivo), mostrando el número de línea de cada coincidencia." },
+        { q:"¿Cómo matas un proceso que se trabó?", a:"Lo ubicas con <code>ps aux</code> o <code>top</code>, luego <code>kill PID</code>. Si no obedece, <code>kill -9 PID</code> lo fuerza (sin dejarlo cerrarse limpio)." },
+        { q:"¿Qué significa <code>chmod 755</code>?", a:"7 para el dueño (leer + escribir + ejecutar), 5 para el grupo y para otros (leer + ejecutar)." },
+        { q:"¿Diferencia entre <code>Ctrl+C</code> y <code>Ctrl+Z</code>?", a:"<code>Ctrl+C</code> termina el proceso. <code>Ctrl+Z</code> lo suspende en segundo plano; lo recuperas con <code>fg</code>." },
+        { q:"¿Cómo guardas la salida en un archivo Y la ves en pantalla a la vez?", a:"Con <code>comando | tee archivo.txt</code>." }
+      ]},
+      { tipo:"recursos", titulo:"Recursos", items:[
+        { nombre:"The Missing Semester (MIT)", url:"https://missing.csail.mit.edu", porQue:"Curso gratis, es el estándar serio para dominar la shell. Existe porque la universidad no enseña estas herramientas y son la base del trabajo diario." },
+        { nombre:"Linux Journey", url:"https://linuxjourney.com", porQue:"Gratis, por niveles cortos. Existe para repaso estructurado y rápido cuando no hay tiempo de un curso largo." },
+        { nombre:"OverTheWire: Bandit", url:"https://overthewire.org/wargames/bandit", porQue:"Retos de terminal por SSH en modo juego. Existe para practicar comandos bajo presión: perfecto para el modo extra difícil." }
+      ]}
+    ]},
+    { id:"b", letra:"B", titulo:"Git + GitHub", cuando:"tarde · ~3h", acc:"var(--acc-git)", secciones:[
+      { tipo:"check", titulo:"Nivel esencial", items:[
+        "<code>git init</code>, <code>git clone &lt;url&gt;</code>, <code>git status</code>, <code>git add .</code> / <code>git add -p</code>, <code>git commit -m \"mensaje\"</code>",
+        "<code>git log --oneline --graph --all</code>, <code>git diff</code> (sin commit) y <code>git diff --staged</code>",
+        "Ramas: <code>git branch</code>, <code>git switch -c nueva-rama</code>, <code>git switch main</code>, <code>git branch -d</code>",
+        "<code>git merge</code>, <code>git pull</code>, <code>git push -u origin rama</code>, <code>git fetch</code>",
+        "<strong>fetch vs pull</strong>: pull = fetch + merge",
+        "<code>.gitignore</code> (patrones: <code>*.log</code>, <code>node_modules/</code>, <code>!excepcion.log</code>)",
+        "<code>git remote -v</code>, qué es <code>origin</code>, qué es <code>upstream</code> (en forks)",
+        "<strong>Resolver conflictos de merge a mano</strong>: marcadores <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>",
+        "Mensajes de commit decentes: imperativo, corto, qué y por qué («agrega validación de email en login»)"
+      ]},
+      { tipo:"check", titulo:"Nivel picky", items:[
+        "<strong>merge vs rebase</strong> (LA pregunta clásica): merge preserva historia (crea merge commit), rebase la reescribe (lineal y limpia). Regla de oro: nunca rebases commits ya pusheados",
+        "<code>git rebase -i HEAD~3</code> → <code>squash</code>, <code>reword</code>, <code>drop</code> (limpiar commits antes de un PR)",
+        "<code>git reset --soft / --mixed / --hard HEAD~1</code> (tabla abajo)",
+        "<strong>reset vs revert</strong>: reset reescribe historia (local), revert crea un commit nuevo que deshace (seguro en ramas compartidas)",
+        "<code>git stash push -m \"wip\"</code>, <code>git stash list</code>, <code>git stash pop</code>, <code>git stash apply</code>",
+        "<code>git commit --amend</code> (arreglar el último commit), <code>git cherry-pick &lt;hash&gt;</code>, <code>git tag -a v1.0 -m \"release\"</code>",
+        "<strong><code>git reflog</code></strong>: recupera commits «perdidos» (te puede salvar la vida y es pregunta picky favorita)",
+        "<code>git blame archivo</code> (quién escribió cada línea), <code>git bisect</code> (concepto: búsqueda binaria del commit que rompió algo)",
+        "<code>HEAD~2</code> vs <code>HEAD^2</code>, qué es <strong>detached HEAD</strong>",
+        "<code>git push --force-with-lease</code> (nunca <code>--force</code> a ciegas en ramas compartidas)",
+        "Conceptos: qué es el staging area, los 3 estados de un archivo (modified/staged/committed), Git Flow vs trunk-based development (solo el concepto)"
+      ]},
+      { tipo:"tabla", titulo:"git reset: los tres modos", headers:["modo","commits","staging","archivos"], rows:[
+        ["--soft","se deshacen","se conservan","se conservan"],
+        ["--mixed (default)","se deshacen","se limpia","se conservan"],
+        ["--hard","se deshacen","se limpia","SE BORRAN"]
+      ]},
+      { tipo:"check", titulo:"GitHub", items:[
+        "Flujo fork → clone → rama → push → <strong>Pull Request</strong> → code review → merge",
+        "Issues, protected branches (por qué no se pushea directo a main), releases/tags",
+        "SSH keys vs personal access token para autenticarte",
+        "Qué es GitHub Actions (CI/CD, concepto de 30 segundos: corre tests automáticamente en cada push)"
+      ]},
+      { tipo:"check", titulo:"Práctica obligatoria", nota:"esto simula el día a día real", items:[
+        "Crea un repo nuevo en GitHub y clónalo",
+        "Crea rama <code>feature-a</code>, haz 2 commits. Crea rama <code>feature-b</code> desde main, toca la MISMA línea del mismo archivo, haz commit",
+        "Mergea <code>feature-a</code> a main. Mergea <code>feature-b</code> → <strong>conflicto intencional</strong>: resuélvelo a mano",
+        "Haz 3 commits feos ('wip', 'arreglo', 'ahora si') y júntalos en uno con <code>rebase -i</code> + squash",
+        "Haz <code>git reset --hard HEAD~1</code> a propósito y <strong>recupera el commit con <code>git reflog</code></strong>",
+        "Usa <code>stash</code>: cambia algo, guárdalo, cambia de rama, vuelve y recupera el stash",
+        "Abre un Pull Request en tu propio repo y revísalo como si fueras otro dev"
+      ]},
+      { tipo:"quiz", titulo:"Quiz", items:[
+        { q:"¿Diferencia entre <code>merge</code> y <code>rebase</code>? ¿Cuándo usarías cada uno?", a:"Merge une las historias creando un commit de merge: preserva el historial tal como pasó. Rebase reescribe tus commits encima de la otra rama: historia lineal y limpia. Merge para integrar ramas compartidas; rebase para limpiar tu rama local antes del PR. Nunca rebase de commits ya pusheados." },
+        { q:"¿Diferencia entre <code>fetch</code> y <code>pull</code>?", a:"<code>fetch</code> descarga los cambios del remoto sin tocar tu trabajo. <code>pull</code> = fetch + merge: los integra de una vez." },
+        { q:"¿Diferencia entre <code>reset</code> y <code>revert</code>?", a:"<code>reset</code> mueve la rama hacia atrás y reescribe la historia (úsalo en local). <code>revert</code> crea un commit nuevo que deshace otro: seguro en ramas compartidas." },
+        { q:"¿Qué es HEAD? ¿Qué es detached HEAD?", a:"<code>HEAD</code> es el puntero a donde estás parado (normalmente una rama). Detached HEAD es apuntar a un commit suelto; los commits que hagas ahí se pierden si no creas una rama primero." },
+        { q:"¿Cómo deshaces el último commit sin perder los cambios? ¿Y perdiéndolos?", a:"Sin perder: <code>git reset --soft HEAD~1</code>. Perdiéndolos: <code>git reset --hard HEAD~1</code>." },
+        { q:"¿Cómo recuperas un commit que borraste con <code>reset --hard</code>?", a:"<code>git reflog</code> muestra todo lo que HEAD ha tocado; encuentras el hash y vuelves con <code>git reset --hard &lt;hash&gt;</code> o lo traes con <code>git cherry-pick</code>." },
+        { q:"Tienes cambios a medias y necesitas cambiar de rama urgente. ¿Qué haces?", a:"<code>git stash</code>, cambias de rama, haces lo urgente, vuelves y <code>git stash pop</code>." }
+      ]},
+      { tipo:"recursos", titulo:"Recursos", items:[
+        { nombre:"Learn Git Branching", url:"https://learngitbranching.js.org/?locale=es_ES", porQue:"Visual e interactivo, en español. Existe porque git solo se entiende de verdad viendo el grafo de commits moverse." },
+        { nombre:"Pro Git (libro oficial)", url:"https://git-scm.com/book/es/v2", porQue:"Gratis, la referencia definitiva. Existe como documentación completa para profundizar en cualquier comando." },
+        { nombre:"Oh Shit, Git!?!", url:"https://ohshitgit.com/es", porQue:"Soluciones a desastres concretos («me equivoqué de rama», «borré todo»). Existe para cuando algo sale mal y necesitas la solución ya." }
+      ]}
+    ]},
+    { id:"c", letra:"C", titulo:"Python", cuando:"noche · ~3h", acc:"var(--acc-py)", secciones:[
+      { tipo:"check", titulo:"Nivel esencial", items:[
+        "Tipos: <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>, <code>list</code>, <code>dict</code>, <code>set</code>, <code>tuple</code>, <code>None</code>",
+        "<strong>Mutables vs inmutables</strong> (pregunta garantizada): list/dict/set mutan, int/str/tuple no",
+        "f-strings, métodos de string: <code>.split()</code>, <code>.join()</code>, <code>.strip()</code>, <code>.replace()</code>, <code>.upper()</code>, <code>.startswith()</code>",
+        "Slicing: <code>lista[1:4]</code>, <code>lista[::-1]</code>, <code>lista[::2]</code>",
+        "Métodos clave: <code>append</code>, <code>extend</code> (¡vs append con lista!), <code>insert</code>, <code>pop</code>, <code>remove</code>, <code>sort</code> vs <code>sorted()</code>, <code>dict.get(clave, default)</code>, <code>.keys()</code>, <code>.values()</code>, <code>.items()</code>",
+        "Comprensiones: <code>[x**2 for x in range(10) if x % 2 == 0]</code>, dict/set comprehension",
+        "<code>enumerate</code>, <code>zip</code>, <code>range</code>, <code>min</code>/<code>max</code>/<code>sum</code>/<code>len</code>, <code>any</code>/<code>all</code>",
+        "Funciones: args posicionales vs keyword, defaults, <code>*args</code>, <code>**kwargs</code>, <code>lambda</code>",
+        "<strong>La trampa del default mutable</strong>: <code>def f(x, lista=[])</code> ← ¿por qué es un bug? (el default se crea UNA vez)",
+        "Excepciones: <code>try/except/else/finally</code>, <code>raise</code>, capturar excepciones específicas (no <code>except:</code> pelón)",
+        "Archivos: <code>with open(...) as f:</code> (context manager: se cierra solo), <code>json.load</code> / <code>json.dump</code> / <code>json.loads</code> / <code>json.dumps</code>",
+        "Clases: <code>__init__</code>, <code>self</code>, <code>__str__</code> vs <code>__repr__</code>, herencia, <code>super()</code>, atributos de clase vs de instancia",
+        "<code>if __name__ == \"__main__\":</code> (para qué sirve)",
+        "<code>pip install</code>, <code>python -m venv .venv</code>, activar el venv, <code>requirements.txt</code>"
+      ]},
+      { tipo:"check", titulo:"Nivel picky", items:[
+        "<strong><code>is</code> vs <code>==</code></strong>: identidad (mismo objeto en memoria) vs igualdad de valor",
+        "<code>copy</code> vs <code>deepcopy</code> (shallow copy comparte los objetos internos)",
+        "Decoradores (qué son: una función que envuelve otra; saber leer <code>@decorador</code>)",
+        "Generadores: <code>yield</code>, diferencia lista vs generador (memoria: el generador produce bajo demanda)",
+        "<code>@property</code>, <code>@staticmethod</code> vs <code>@classmethod</code>",
+        "Type hints: <code>def suma(a: int, b: int) -&gt; int:</code>, <code>list[int]</code>, <code>dict[str, int]</code>, <code>Optional</code>",
+        "<code>dataclasses</code>: <code>@dataclass</code> y qué te ahorra",
+        "Scope LEGB (Local → Enclosing → Global → Built-in), qué es un closure",
+        "<code>collections</code>: <code>Counter</code>, <code>defaultdict</code>, <code>deque</code> (saber que existen y para qué)",
+        "<code>map</code>/<code>filter</code> vs comprensiones (y por qué las comprensiones son más pythónicas)",
+        "Complejidad de operaciones: <code>append</code> O(1), <code>dict[clave]</code> O(1), <code>x in lista</code> O(n), <code>x in set</code> O(1)"
+      ]},
+      { tipo:"check", titulo:"Práctica obligatoria", items:[
+        "FizzBuzz sin googlear",
+        "Contar frecuencia de palabras en un texto con <code>Counter</code>",
+        "Invertir un string de 3 formas distintas",
+        "Leer un CSV/JSON, agrupar datos con un dict y escribir el resultado",
+        "Clase <code>CuentaBancaria</code> con depositar/retirar/saldo, que lance excepción si retiras de más. Subclase <code>CuentaAhorro</code> con interés",
+        "Escribir la misma función con loop y con comprensión"
+      ]},
+      { tipo:"quiz", titulo:"Quiz", items:[
+        { q:"¿Diferencia entre <code>is</code> y <code>==</code>?", a:"<code>==</code> compara valor; <code>is</code> compara identidad (si son el mismo objeto en memoria)." },
+        { q:"¿Por qué <code>a = 256; b = 256; a is b</code> da True pero con 257 puede dar False?", a:"Python guarda en caché los enteros pequeños (-5 a 256), por eso son el mismo objeto. Es un detalle de implementación: usa siempre <code>==</code> para comparar valores." },
+        { q:"¿Por qué <code>def f(lista=[])</code> es una trampa?", a:"El default se evalúa UNA sola vez al definir la función, así que todas las llamadas comparten la misma lista. Solución: <code>def f(lista=None)</code> y dentro <code>lista = lista or []</code>." },
+        { q:"¿Diferencia entre lista y tupla? ¿Cuándo usar cada una?", a:"La lista es mutable, la tupla no. Tupla para datos que no deben cambiar (y sirven como llaves de diccionario)." },
+        { q:"¿Diferencia entre lista y generador?", a:"La lista materializa todo en memoria; el generador produce cada valor bajo demanda (lazy). Para datos grandes, generador." },
+        { q:"¿Cómo manejas un error que puede o no ocurrir?", a:"<code>try/except</code> capturando la excepción específica (nunca <code>except:</code> pelón), <code>finally</code> para limpieza, y <code>raise</code> para lanzar errores propios." }
+      ]},
+      { tipo:"recursos", titulo:"Recursos", items:[
+        { nombre:"Tutorial oficial de Python", url:"https://docs.python.org/es/3/tutorial/", porQue:"La fuente, en español. Existe como referencia definitiva del lenguaje." },
+        { nombre:"Real Python", url:"https://realpython.com", porQue:"Artículos profundos por tema. Existe para entender el «por qué» detrás de las cosas, no solo el «cómo»." },
+        { nombre:"Exercism (Python track)", url:"https://exercism.org/tracks/python", porQue:"Ejercicios con mentores gratis. Existe para práctica repetida con feedback humano." }
+      ]}
+    ]}
+  ]},
+  { dia:"Día 2 — Jueves", bloques:[
+    { id:"d", letra:"D", titulo:"SQL", cuando:"mañana · ~3h", acc:"var(--acc-sql)", secciones:[
+      { tipo:"check", titulo:"Nivel esencial", items:[
+        "<code>SELECT</code>, <code>WHERE</code>, <code>AND/OR/NOT</code>, <code>IN</code>, <code>BETWEEN</code>, <code>LIKE</code> (<code>%</code> cualquier cosa, <code>_</code> un carácter), <code>IS NULL</code> / <code>IS NOT NULL</code>",
+        "<code>ORDER BY ... ASC/DESC</code>, <code>LIMIT</code> / <code>OFFSET</code>, <code>DISTINCT</code>",
+        "Agregaciones: <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MAX</code>, <code>MIN</code>",
+        "<code>GROUP BY</code> + <code>HAVING</code> — y la diferencia con <code>WHERE</code> (WHERE filtra filas ANTES de agrupar, HAVING filtra DESPUÉS)",
+        "<strong>JOINs</strong> (saber dibujarlos): <code>INNER</code>, <code>LEFT</code>, <code>RIGHT</code>, <code>FULL OUTER</code>, <code>CROSS</code>, y self-join",
+        "<code>INSERT INTO</code>, <code>UPDATE ... WHERE</code> (¡nunca sin WHERE!), <code>DELETE</code>",
+        "<code>CREATE TABLE</code>: <code>PRIMARY KEY</code>, <code>FOREIGN KEY ... REFERENCES</code>, <code>NOT NULL</code>, <code>UNIQUE</code>, <code>DEFAULT</code>",
+        "Alias de tablas y columnas (<code>AS</code>)"
+      ]},
+      { tipo:"check", titulo:"Nivel picky", items:[
+        "Subconsultas (en WHERE, en FROM, en SELECT)",
+        "<strong>CTEs</strong>: <code>WITH ventas_mes AS (...) SELECT ...</code> — más legibles que subconsultas anidadas",
+        "<code>CASE WHEN ... THEN ... ELSE ... END</code>",
+        "<code>COALESCE(col, 0)</code>, <code>NULLIF</code>, y la trampa: <strong><code>NULL = NULL</code> no es verdadero</strong> → por eso existe <code>IS NULL</code>",
+        "<code>UNION</code> vs <code>UNION ALL</code> (UNION quita duplicados, ALL es más rápido)",
+        "<code>EXISTS</code> vs <code>IN</code> (concepto)",
+        "<strong>Window functions</strong>: <code>ROW_NUMBER()</code>, <code>RANK()</code> vs <code>DENSE_RANK()</code>, <code>LAG()</code>/<code>LEAD()</code>, <code>SUM() OVER (PARTITION BY ...)</code>",
+        "Índices: qué aceleran (búsquedas/joins) y qué cuestan (escrituras más lentas, espacio)",
+        "<code>TRUNCATE</code> vs <code>DELETE</code> vs <code>DROP</code>",
+        "Conceptos de 30 segundos: transacción, ACID, normalización 1NF/2NF/3NF, <code>EXPLAIN</code> (ver el plan de ejecución)",
+        "Las queries clásicas: <strong>encontrar duplicados</strong> (<code>GROUP BY ... HAVING COUNT(*) &gt; 1</code>) y <strong>el segundo salario más alto</strong> (<code>LIMIT 1 OFFSET 1</code> o <code>DENSE_RANK</code>)"
+      ]},
+      { tipo:"check", titulo:"Práctica obligatoria", nota:"en DB Fiddle o sqlite3, sin instalar nada pesado", items:[
+        "Crea <code>usuarios(id, nombre, ciudad)</code> y <code>pedidos(id, usuario_id, monto, fecha)</code>",
+        "Inserta 6 usuarios y 10 pedidos (que 2 usuarios no tengan pedidos)",
+        "10 queries: todos los JOINs, total gastado por usuario (GROUP BY), usuarios sin pedidos (LEFT JOIN + IS NULL), pedido más caro por usuario (window function), duplicados por ciudad",
+        "Reescribe una subconsulta como CTE"
+      ]},
+      { tipo:"quiz", titulo:"Quiz", items:[
+        { q:"¿Diferencia entre <code>WHERE</code> y <code>HAVING</code>?", a:"<code>WHERE</code> filtra filas ANTES de agrupar; <code>HAVING</code> filtra los grupos DESPUÉS del <code>GROUP BY</code>." },
+        { q:"¿Diferencia entre <code>INNER JOIN</code> y <code>LEFT JOIN</code>?", a:"<code>INNER</code> devuelve solo coincidencias en ambas tablas. <code>LEFT</code> devuelve todo lo de la tabla izquierda, con NULL donde no hay coincidencia. Ej: «usuarios CON pedidos» vs «todos los usuarios y sus pedidos, si tienen»." },
+        { q:"¿Cómo encuentras filas duplicadas?", a:"<code>SELECT col, COUNT(*) FROM tabla GROUP BY col HAVING COUNT(*) &gt; 1</code>" },
+        { q:"¿Por qué <code>WHERE columna = NULL</code> no funciona?", a:"NULL significa «desconocido»: cualquier comparación con NULL da NULL (ni verdadero ni falso). Por eso existe <code>IS NULL</code>." },
+        { q:"¿Diferencia entre <code>RANK</code> y <code>DENSE_RANK</code>?", a:"<code>RANK</code> deja huecos después de empates (1, 1, 3); <code>DENSE_RANK</code> no (1, 1, 2)." },
+        { q:"¿Qué es un índice y cuándo NO pondrías uno?", a:"Estructura que acelera búsquedas y joins, pero encarece escrituras y ocupa espacio. No lo pondrías en columnas con pocos valores distintos ni en tablas con muchísimos INSERT/UPDATE." }
+      ]},
+      { tipo:"recursos", titulo:"Recursos", items:[
+        { nombre:"SQLBolt", url:"https://sqlbolt.com", porQue:"Interactivo, queries en el navegador desde el minuto uno. Existe para aprender SQL haciendo, no leyendo." },
+        { nombre:"DB Fiddle", url:"https://www.db-fiddle.com", porQue:"Editor SQL online gratis sin instalar nada. Existe para practicar las queries de la práctica obligatoria sin montar un servidor." },
+        { nombre:"LeetCode Database (SQL 50)", url:"https://leetcode.com/studyplan/top-sql-50/", porQue:"Preguntas de entrevistas reales. Existe porque las empresas reciclan estas preguntas." }
+      ]}
+    ]},
+    { id:"e", letra:"E", titulo:"APIs + TypeScript + React", cuando:"tarde · ~3h", acc:"var(--acc-api)", secciones:[
+      { tipo:"check", titulo:"APIs / REST", nota:"~1h", items:[
+        "Qué es una API y qué es REST (concepto: recursos, URLs, métodos HTTP)",
+        "Métodos y CRUD: <code>GET</code> (leer), <code>POST</code> (crear), <code>PUT</code> (reemplazar), <code>PATCH</code> (actualizar parcial), <code>DELETE</code>",
+        "<strong>Status codes</strong> (tabla abajo, memorizar) + la trampa clásica: <strong>401 vs 403</strong> (autenticación vs autorización)",
+        "Headers importantes: <code>Content-Type: application/json</code>, <code>Authorization: Bearer &lt;token&gt;</code>",
+        "Auth (conceptos): API key vs Bearer token/JWT vs OAuth (qué problema resuelve cada uno)",
+        "Path params (<code>/usuarios/42</code>) vs query params (<code>/usuarios?ciudad=mx&amp;page=2</code>)",
+        "Idempotencia (GET/PUT/DELETE idempotentes, POST no), versionado <code>/v1/</code>, paginación, CORS (concepto)",
+        "<strong>Práctica</strong>: 5 llamadas con <code>curl</code> o Postman a JSONPlaceholder (GET lista, GET uno, POST, PATCH, DELETE) y leer los status codes que responde"
+      ]},
+      { tipo:"tabla", titulo:"Status codes que tienes que saber", headers:["código","significado"], rows:[
+        ["200","OK"],["201","Creado"],["204","OK sin contenido (típico en DELETE)"],["301","Redirección permanente"],
+        ["400","Request mal formado (culpa del cliente)"],["401","No autenticado (falta token/login)"],["403","Autenticado pero sin permiso"],
+        ["404","No existe"],["409","Conflicto (ej: email ya registrado)"],["422","Formato válido, contenido inválido"],["500","Error del servidor"]
+      ]},
+      { tipo:"check", titulo:"TypeScript", nota:"~1h", items:[
+        "Por qué existe TypeScript: JavaScript + tipos estáticos, errores en el editor antes de ejecutar",
+        "Tipos básicos: <code>string</code>, <code>number</code>, <code>boolean</code>, <code>string[]</code>, <code>Array&lt;number&gt;</code>, tuplas, <code>null</code>/<code>undefined</code>",
+        "<strong><code>interface</code> vs <code>type</code></strong> (pregunta clásica: interface extiende/fusiona, type hace uniones e intersecciones; para objetos ambas sirven)",
+        "Union types: <code>string | number</code>, opcionales <code>nombre?: string</code>, <code>null</code> explícito",
+        "<strong><code>any</code> vs <code>unknown</code></strong> (any apaga el chequeo, unknown obliga a verificar el tipo)",
+        "Generics (concepto + poder leerlo): <code>function primero&lt;T&gt;(arr: T[]): T</code>",
+        "Utility types: <code>Partial&lt;T&gt;</code>, <code>Pick&lt;T, 'a'&gt;</code>, <code>Omit&lt;T, 'b'&gt;</code>, <code>Record&lt;string, number&gt;</code>",
+        "Type narrowing: <code>typeof</code>, <code>instanceof</code>, chequear <code>if (x != null)</code>"
+      ]},
+      { tipo:"check", titulo:"JavaScript base", nota:"lo preguntan SIEMPRE aunque el puesto sea de TS", items:[
+        "<code>var</code> vs <code>let</code> vs <code>const</code> (scope y reasignación)",
+        "<code>==</code> vs <code>===</code> (coerción de tipos)",
+        "Template literals, destructuring (objetos y arrays), spread/rest <code>...</code>",
+        "<code>map</code>, <code>filter</code>, <code>reduce</code>, <code>find</code>, <code>some</code>, <code>every</code>",
+        "Promesas y <code>async/await</code>, <code>.then/.catch</code>, qué pasa si no manejas un rechazo",
+        "Qué es un closure (concepto con un ejemplo simple)"
+      ]},
+      { tipo:"check", titulo:"React", nota:"~1h", items:[
+        "Qué es React y qué es una SPA (vs sitio multipágina)",
+        "Componentes funcionales, props, <code>children</code>, composición",
+        "<code>useState</code> y la regla de oro: <strong>el estado no se muta, se reemplaza</strong> (<code>setLista([...lista, nuevo])</code>)",
+        "<code>useEffect</code> + array de dependencias: <code>[]</code> (solo al montar), <code>[x]</code> (cuando cambia x), sin array (cada render — casi nunca lo quieres). Cleanup function (concepto)",
+        "Renderizado condicional (<code>{condicion &amp;&amp; &lt;Componente/&gt;}</code>, ternario), listas con <code>.map()</code> y <strong>por qué <code>key</code> importa</strong> (y por qué el índice es mala key si la lista cambia)",
+        "Formularios controlados (value + onChange) vs no controlados (refs)",
+        "Lifting state up, props drilling vs Context API (concepto)",
+        "<code>useRef</code> (referenciar DOM / guardar valor sin re-render), <code>useMemo</code>/<code>useCallback</code> (concepto: memoizar para performance)",
+        "Virtual DOM (concepto de 30 segundos: React compara un árbol en memoria y actualiza solo lo que cambió)",
+        "Custom hooks (concepto: extraer lógica con estado a una función reutilizable)"
+      ]},
+      { tipo:"quiz", titulo:"Quiz", items:[
+        { q:"¿Diferencia entre <code>PUT</code> y <code>PATCH</code>?", a:"<code>PUT</code> reemplaza el recurso completo; <code>PATCH</code> modifica solo los campos que envías." },
+        { q:"¿Diferencia entre 401 y 403?", a:"<code>401</code>: no autenticado (falta login o token). <code>403</code>: sí estás autenticado, pero no tienes permiso para eso." },
+        { q:"¿Qué es CORS y por qué existe?", a:"El navegador bloquea peticiones entre dominios distintos por seguridad; el servidor debe permitirlo explícitamente con headers (<code>Access-Control-Allow-Origin</code>)." },
+        { q:"¿<code>interface</code> vs <code>type</code> en TypeScript?", a:"Para objetos sirven ambas. <code>interface</code> se puede extender y fusionar declaraciones; <code>type</code> hace uniones, intersecciones y alias de cualquier tipo." },
+        { q:"¿<code>any</code> vs <code>unknown</code>?", a:"<code>any</code> apaga el chequeo de tipos (peligroso). <code>unknown</code> te obliga a verificar el tipo antes de usarlo: es el «any seguro»." },
+        { q:"¿Qué hace <code>useEffect(() =&gt; {...}, [])</code>? ¿Y sin el array?", a:"Con <code>[]</code> corre solo al montar el componente. Sin array corre después de CADA render — casi nunca es lo que quieres." },
+        { q:"¿Por qué no debes mutar el estado directamente?", a:"React detecta cambios comparando referencias. Si haces <code>lista.push(x)</code>, la referencia no cambia y no re-renderiza. Crea uno nuevo: <code>setLista([...lista, x])</code>." },
+        { q:"¿<code>==</code> vs <code>===</code>?", a:"<code>==</code> convierte tipos antes de comparar (<code>\"1\" == 1</code> es true); <code>===</code> compara tipo Y valor. Usa siempre <code>===</code>." }
+      ]},
+      { tipo:"recursos", titulo:"Recursos", items:[
+        { nombre:"react.dev (docs oficiales)", url:"https://react.dev/learn", porQue:"Tutorial interactivo con ejercicios en el navegador. Existe como la fuente moderna y oficial; el React viejo de clases ya casi no se usa." },
+        { nombre:"TypeScript Handbook oficial", url:"https://www.typescriptlang.org/docs/handbook/", porQue:"La referencia. Existe para consultar tipos concretos cuando los necesitas." },
+        { nombre:"JSONPlaceholder", url:"https://jsonplaceholder.typicode.com", porQue:"API REST falsa y gratis. Existe para practicar fetch/curl sin necesitar backend propio." }
+      ]}
+    ]},
+    { id:"f", letra:"F", titulo:"Lógica + estructuras de datos", cuando:"noche · ~3h", acc:"var(--acc-log)", secciones:[
+      { tipo:"check", titulo:"Estructuras", nota:"qué son, cuándo usarlas y su Big-O básico", items:[
+        "Array/string, hashmap (dict en Python / Map en JS), set",
+        "Stack (LIFO: el call stack, el botón «atrás»), Queue (FIFO: fila de impresión)",
+        "Linked list (concepto: nodos que apuntan al siguiente)",
+        "Árbol binario y BST (concepto: izquierda menor, derecha mayor)",
+        "<strong>Big-O</strong>: O(1) acceso directo, O(log n) binary search, O(n) recorrer, O(n log n) buenos sorts, O(n²) doble loop",
+        "Poder decir el Big-O de tu propia solución sin dudar"
+      ]},
+      { tipo:"check", titulo:"Técnicas", nota:"cubren el 80% de los problemas de entrevista junior", items:[
+        "<strong>Hashmap para contar/recordar</strong> (convierte O(n²) en O(n))",
+        "<strong>Two pointers</strong> (palíndromos, pares que suman X en array ordenado)",
+        "<strong>Sliding window</strong> (subarrays/substrings óptimos)",
+        "<strong>Binary search</strong> (si está ordenado, piensa en log n)",
+        "<strong>Stack</strong> (paréntesis, historial)",
+        "<strong>Recursión</strong> (caso base + caso recursivo; Fibonacci y por qué memoizar)"
+      ]},
+      { tipo:"check", titulo:"Problemas obligatorios", nota:"regla: 20 min sin ver solución, luego estudia la solución y reescríbela de memoria", items:[
+        "FizzBuzz (calentamiento, no te confíes)",
+        "Invertir string / detectar palíndromo",
+        "<strong>Two Sum</strong> (el problema más preguntado de la historia)",
+        "Anagrama válido (Counter/dict)",
+        "Paréntesis balanceados (stack)",
+        "Binary search a mano",
+        "Fibonacci recursivo vs iterativo (+ decir el Big-O de cada uno)",
+        "Encontrar el duplicado / contar duplicados en un array",
+        "Extra difícil: máximo subarray (Kadane) o merge de dos arrays ordenados"
+      ]},
+      { tipo:"pasos", titulo:"Cómo resolver EN ENTREVISTA", nota:"formato de 5 pasos, practícalo en cada problema", items:[
+        "<strong>Repite el problema</strong> con tus palabras y pregunta casos borde («¿puede estar vacío?», «¿hay negativos?», «¿qué devuelvo si no hay solución?»)",
+        "<strong>Di la solución ingenua primero</strong> y su Big-O («lo obvio es doble loop, O(n²)...»)",
+        "<strong>Propón la mejora</strong> explicando el trade-off («...pero con un hashmap lo bajo a O(n) gastando más memoria»)",
+        "<strong>Codea hablando</strong> (nada de silencios largos)",
+        "<strong>Prueba con ejemplos</strong>: el caso normal, el vacío, el de un elemento"
+      ]},
+      { tipo:"nota", texto:"<strong>Simulacro para cerrar el jueves:</strong> 1 problema de lógica + 5 comandos de terminal + 5 preguntas de git + 2 queries SQL + explicar tu proyecto en 2 minutos. Todo en voz alta, cronometrado, sin googlear." },
+      { tipo:"recursos", titulo:"Recursos", items:[
+        { nombre:"NeetCode 150", url:"https://neetcode.io", porQue:"Lista curada por frecuencia real en entrevistas, con video explicación. Existe porque 5000 problemas de LeetCode abruman y estos 150 cubren los patrones." },
+        { nombre:"LeetCode", url:"https://leetcode.com", porQue:"El estándar de la industria. Existe porque las empresas sacan preguntas de ahí." },
+        { nombre:"Codewars", url:"https://www.codewars.com", porQue:"Retos por niveles (kyu). Existe para calentar con problemas cortos y ver soluciones de otros." }
+      ]}
+    ]}
+  ]},
+  { dia:"Viernes", bloques:[
+    { id:"v", letra:"V", titulo:"Antes de la entrevista", cuando:"el gran día", acc:"var(--acc-vie)", secciones:[
+      { tipo:"check", titulo:"Repaso", items:[
+        "Repasa SOLO tu <code>errores.md</code> y los quizzes que fallaste. No intentes aprender nada nuevo",
+        "Simulacro corto (30-45 min): 5 comandos de terminal, 5 de git, 1 problema de lógica, 2 queries SQL — todo en voz alta",
+        "Repasa las preguntas picky maestras (abajo)",
+        "Prepara el ambiente: terminal abierta, Git Bash listo, repo limpio, editor abierto",
+        "Ensaya la defensa de tu proyecto (2 minutos)"
+      ]},
+      { tipo:"check", titulo:"Defensa de tu proyecto", nota:"tu backend/ y main.py están empezando — no es problema si lo manejas bien", items:[
+        "«¿En qué estás trabajando?» → describe qué hará tu backend, qué problema resuelve y qué stack elegiste (y POR QUÉ lo elegiste)",
+        "«¿Qué es lo más difícil que te has encontrado aprendiendo?» → ten 1 historia concreta con cómo lo resolviste",
+        "«¿Qué mejorarías de tu código?» → demuestra autocrítica (tests, mejor estructura, manejo de errores)"
+      ]},
+      { tipo:"grupos", titulo:"Preguntas picky maestras", nota:"repásalas en la mañana, respóndelas en voz alta", grupos:[
+        { titulo:"Terminal", items:["&gt; vs &gt;&gt;","Ctrl+C vs Ctrl+Z","qué hace chmod 755","qué es $?","buscar texto en todos los archivos de una carpeta"] },
+        { titulo:"Git", items:["merge vs rebase","fetch vs pull","reset vs revert","qué es HEAD","recuperar un commit borrado (reflog)","cambios a medias + cambio de rama (stash)"] },
+        { titulo:"Python", items:["is vs ==","la trampa del default mutable","lista vs tupla","lista vs generador","__init__ vs __str__","if __name__ == \"__main__\""] },
+        { titulo:"SQL", items:["WHERE vs HAVING","INNER vs LEFT JOIN","NULL = NULL","UNION vs UNION ALL","encontrar duplicados","segundo salario más alto"] },
+        { titulo:"APIs", items:["PUT vs PATCH","401 vs 403","path vs query params","qué es CORS","qué es idempotencia"] },
+        { titulo:"TS / React", items:["interface vs type","any vs unknown","== vs ===","var/let/const","useEffect con [] vs sin array","por qué key en listas","por qué no mutar el estado"] },
+        { titulo:"Lógica", items:["Big-O de tu solución","cuándo hashmap vs array","stack vs queue","qué necesita siempre la recursión (caso base)"] }
+      ]},
+      { tipo:"nota", texto:"<strong>Llega con:</strong> tu proyecto abierto, terminal lista, repo limpio, y tus apuntes de errores repasados." }
+    ]}
+  ]}
+];
+
+const KEY = "roadmap-entrevista-v1";
+let store = {};
+try { store = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e) { store = {}; }
+
+function renderSeccion(blockId, s, si){
+  const nota = s.nota ? `<span class="nota">${s.nota}</span>` : "";
+  if(s.tipo === "check"){
+    const items = s.items.map((it, ii) => {
+      const id = `${blockId}-${si}-${ii}`;
+      const chk = store[id] ? "checked" : "";
+      return `<li><label><input type="checkbox" data-id="${id}" ${chk}><span class="box" aria-hidden="true"></span><span class="txt">${it}</span></label></li>`;
+    }).join("");
+    return `<section class="seccion"><h3>${s.titulo}${nota}</h3><ul class="checklist">${items}</ul></section>`;
+  }
+  if(s.tipo === "quiz"){
+    const items = s.items.map(qa =>
+      `<details class="qa"><summary>${qa.q}</summary><p class="ans">${qa.a}</p></details>`
+    ).join("");
+    return `<section class="seccion"><h3>${s.titulo}${nota || '<span class="nota">respóndete en voz alta, luego abre para comparar</span>'}</h3>${items}</section>`;
+  }
+  if(s.tipo === "recursos"){
+    const items = s.items.map(r =>
+      `<li><a href="${r.url}" target="_blank" rel="noopener">${r.nombre}</a><p>${r.porQue}</p></li>`
+    ).join("");
+    return `<section class="seccion"><h3>${s.titulo}${nota || '<span class="nota">elige 1-2, no todos</span>'}</h3><ul class="recursos">${items}</ul></section>`;
+  }
+  if(s.tipo === "pasos"){
+    const items = s.items.map(i => `<li>${i}</li>`).join("");
+    return `<section class="seccion"><h3>${s.titulo}${nota}</h3><ol class="pasos">${items}</ol></section>`;
+  }
+  if(s.tipo === "tabla"){
+    const th = s.headers.map(h => `<th>${h}</th>`).join("");
+    const tr = s.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("");
+    return `<section class="seccion"><h3>${s.titulo}${nota}</h3><table class="tabla"><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table></section>`;
+  }
+  if(s.tipo === "nota"){
+    return `<div class="nota-box" style="--acc:var(--acc)">${s.texto}</div>`;
+  }
+  if(s.tipo === "grupos"){
+    const g = s.grupos.map(gr =>
+      `<div class="grupo"><h4>${gr.titulo}</h4><ul class="maestras">${gr.items.map(i => `<li>${i}</li>`).join("")}</ul></div>`
+    ).join("");
+    return `<section class="seccion"><h3>${s.titulo}${nota}</h3>${g}</section>`;
+  }
+  return "";
+}
+
+function render(){
+  let htmlMain = "", htmlNav = "";
+  PLAN.forEach(dia => {
+    htmlNav += `<p class="nav-dia">${dia.dia}</p>`;
+    dia.bloques.forEach(b => {
+      const secs = b.secciones.map((s, si) => renderSeccion(b.id, s, si)).join("");
+      htmlMain += `
+      <details class="bloque" id="bloque-${b.id}" style="--acc:${b.acc}">
+        <summary>
+          <span class="chip">${b.letra}</span>
+          <span class="bhead">
+            <span class="btitle">${b.titulo}</span>
+            <span class="bcuando">${b.cuando}</span>
+          </span>
+          <span class="bprog"><span class="bar"><span class="fill"></span></span><span class="pct">0%</span></span>
+          <span class="chev"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </summary>
+        <div class="bbody">${secs}</div>
+      </details>`;
+      htmlNav += `<a class="nav-item" href="#bloque-${b.id}" data-block="${b.id}"><span class="dot" style="background:${b.acc}"></span><span class="nav-name">${b.letra} · ${b.titulo}</span><span class="nav-pct">0%</span></a>`;
+    });
+  });
+  document.getElementById("bloques").innerHTML = htmlMain;
+  document.getElementById("nav").innerHTML = htmlNav;
+}
+
+function actualizar(){
+  let totalAll = 0, doneAll = 0;
+  document.querySelectorAll(".bloque").forEach(b => {
+    const inputs = [...b.querySelectorAll('input[type="checkbox"]')];
+    const done = inputs.filter(i => i.checked).length;
+    totalAll += inputs.length; doneAll += done;
+    const pct = inputs.length ? Math.round(done / inputs.length * 100) : 0;
+    b.querySelector(".fill").style.width = pct + "%";
+    b.querySelector(".pct").textContent = pct + "%";
+    const navEl = document.querySelector(`.nav-item[data-block="${b.id.replace("bloque-","")}"]`);
+    if(navEl) navEl.querySelector(".nav-pct").textContent = pct + "%";
+    b.querySelector(".chip").style.background = pct === 100
+      ? "color-mix(in srgb, var(--acc) 30%, transparent)"
+      : "";
+  });
+  const pctAll = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
+  const c = 213.63;
+  document.getElementById("ring-fill").style.strokeDashoffset = c * (1 - pctAll / 100);
+  document.getElementById("pct-all").textContent = pctAll + "%";
+}
+
+function abrirPrimeroIncompleto(){
+  const bloques = [...document.querySelectorAll(".bloque")];
+  for(const b of bloques){
+    const inputs = [...b.querySelectorAll('input[type="checkbox"]')];
+    const done = inputs.filter(i => i.checked).length;
+    if(inputs.length && done < inputs.length){ b.open = true; return; }
+  }
+  if(bloques.length) bloques[bloques.length - 1].open = true;
+}
+
+function proximoViernes(){
+  const ahora = new Date();
+  const d = new Date(ahora);
+  d.setHours(9, 0, 0, 0);
+  const delta = (5 - d.getDay() + 7) % 7;
+  d.setDate(d.getDate() + delta);
+  if(d <= ahora) d.setDate(d.getDate() + 7);
+  return d;
+}
+const target = proximoViernes();
+function tick(){
+  const diff = target - new Date();
+  const el = document.getElementById("cd");
+  if(diff <= 0){ el.textContent = "llegó el día"; return; }
+  const s = Math.floor(diff / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor(s % 86400 / 3600);
+  const m = Math.floor(s % 3600 / 60);
+  const ss = s % 60;
+  const pad = n => String(n).padStart(2, "0");
+  el.textContent = (d > 0 ? d + "d " : "") + pad(h) + ":" + pad(m) + ":" + pad(ss);
+}
+
+render();
+actualizar();
+abrirPrimeroIncompleto();
+tick();
+setInterval(tick, 1000);
+
+document.addEventListener("change", e => {
+  if(e.target.matches('input[type="checkbox"][data-id]')){
+    store[e.target.dataset.id] = e.target.checked;
+    localStorage.setItem(KEY, JSON.stringify(store));
+    actualizar();
+  }
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  if(confirm("¿Borrar todo el progreso guardado?")){
+    store = {};
+    localStorage.removeItem(KEY);
+    document.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+    actualizar();
+    document.querySelectorAll(".bloque").forEach(b => b.open = false);
+    abrirPrimeroIncompleto();
+  }
+});
+</script>
+</body>
+</html>
